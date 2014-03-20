@@ -33,6 +33,12 @@ svg{
   margin:50px auto 50px auto;
   padding:100px;
 }
+h1{
+  text-align: center;
+}
+p{
+  text-align: center;
+}
 
 </style>
 <title>HW 5 ajm339</title>
@@ -42,11 +48,27 @@ svg{
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 
 <body>
+<h1>Alex Meyers, ajm339 HW5</h1>
+<p>P1:</p>
 <div id='usmap'></div>
-<div id='map'></div>
+<p>P3:</p>
+<div id='p3'></div>
+<p>P4:</p>
+<p> The xScale is different because the average of each gaussian distribution hovers around 0, so the guassian distribution of 100 means of gaussian distributions will be of values hovering around 0.</p>
+<div id='p4'></div>
+<p>P5:</p>
+<div id='p5'></div>
+<p>P6:</p>
+<p>The xScale hovers around 1 since the histogram represents the gaussian distribution of the average of 1000 exponential graphs, and the most dense part of the exponential graph is around 1.</p>
+<div id='p6'></div>
+<p>P7:</p>
+<div id='p7'></div>
+<p>P8:</p>
+<p>The histogram is similar in that it peaks in the center, but it differs in that although the histogram has a highly concentrated center, the rest of the data is significantly smaller and spread out.</p>
+<div id='p8'></div>
 
 <script>
-
+//P1
 var width = 960,
     height = 500,
     centered;
@@ -132,7 +154,7 @@ function clicked(d) {
       .style("stroke-width", 1.5 / k + "px");
 }
 
-
+//P2
 function plotHistogram(divID, data, title){
     if(typeof(title)=='undefined' || title==null){
       title = "";
@@ -178,7 +200,7 @@ function plotHistogram(divID, data, title){
       .attr("width", xScale(binWidth) - xScale(0))
       .attr("height", function (bar) { return height - padding - yScale(bar.y); });
 
-    svg.append("text").attr('x', xScale(endptX/2)).attr('y', yScale(endptY)).text(title);
+    svg.append("text").attr('x', 150).attr('y', 0).text(title);
 
 }
 
@@ -186,6 +208,7 @@ function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
 
+//P3
 var normal = d3.random.normal();
 
 function normal1000(){
@@ -197,6 +220,9 @@ function normal1000(){
   return array;
 } 
 
+plotHistogram('#p3', normal1000(), 'normal1000()');
+
+//P4
 function meanNormal100(){
   var means = [];
   for(var i=1; i<=100; i++){
@@ -205,6 +231,9 @@ function meanNormal100(){
   return means;
 }
 
+plotHistogram('#p4', meanNormal100(), 'meanNormal100()');
+
+//P5
 function exponential1000(){
   exponentials = [];
   for(var i=1; i<=1000; i++){
@@ -214,6 +243,9 @@ function exponential1000(){
   return exponentials;
 }
 
+plotHistogram('#p5', exponential1000(), 'exponential1000()');
+
+//P6
 function meanExponential100(){
   var means = [];
   for(var i=1; i<=100; i++){
@@ -222,6 +254,9 @@ function meanExponential100(){
   return means;
 }
 
+plotHistogram('#p6', meanExponential100(), 'meanExponential100()');
+
+//P7
 function cauchy1000(){
   var array = [];
   for(var i=1; i<=1000; i++){
@@ -231,6 +266,9 @@ function cauchy1000(){
   return array;
 }
 
+plotHistogram('#p7', cauchy1000(), 'cauchy1000()');
+
+//P8
 function meanCauchy100(){
   var means = [];
   for(var i=1; i<=100; i++){
@@ -239,13 +277,9 @@ function meanCauchy100(){
   return means;
 }
 
+plotHistogram('#p8', meanCauchy100(), 'meanCauchy100()');
+
 </script>
-
-<p>P4: The xScale is different because the average of each gaussian distribution hovers around 0, so the guassian distribution of 100 means of gaussian distributions will be of values hovering around 0.</p>
-
-<p>P6: The xScale hovers around 1 since the histogram represents the gaussian distribution of the average of 1000 exponential graphs, and the most dense part of the exponential graph is around 1.</p>
-
-<p>P8: The histogram is similar in that it peaks in the center, but it differs in that although the histogram has a highly concentrated center, the rest of the data is significantly smaller and spread out.</p>
 
 
 
