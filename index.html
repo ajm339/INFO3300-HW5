@@ -39,6 +39,10 @@ h1{
 p{
   text-align: center;
 }
+.axis{
+  stroke:black;
+  fill:none;
+}
 
 </style>
 <title>HW 5 ajm339</title>
@@ -51,7 +55,7 @@ p{
 <h1>Alex Meyers, ajm339 HW5</h1>
 <p>P1:</p>
 <div id='usmap'></div>
-<p>P3:</p>
+<p>P2, P3:</p>
 <div id='p3'></div>
 <p>P4:</p>
 <p> The xScale is different because the average of each gaussian distribution hovers around 0, so the guassian distribution of 100 means of gaussian distributions will be of values hovering around 0.</p>
@@ -94,6 +98,7 @@ svg.append("rect")
     .attr("class", "background")
     .attr("width", width)
     .attr("height", height)
+    .attr("stroke", "none")
     .on("click", clicked);
 
 var g = svg.append("g");
@@ -197,6 +202,9 @@ function plotHistogram(divID, data, title){
     bars.attr("transform", function (bar) { return "translate(" + xScale(bar.x) + ", " + yScale(bar.y) + ")"; });
     bars.append("rect")
       .attr("x", 1)
+      .attr("fill", "pink")
+      .attr("stroke-width", "1")
+      .attr("stroke", "gray")
       .attr("width", xScale(binWidth) - xScale(0))
       .attr("height", function (bar) { return height - padding - yScale(bar.y); });
 
