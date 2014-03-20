@@ -2,20 +2,16 @@
 <meta charset="utf-8">
 <head>
 <style>
-
 .background {
   fill: none;
   pointer-events: all;
 }
-
 #states {
   fill: #aaa;
 }
-
 #states .active {
   fill: orange;
 }
-
 #state-borders {
   fill: none;
   stroke: #fff;
@@ -33,6 +29,8 @@ svg{
   margin:50px auto 50px auto;
   padding:100px;
 }
+.axis path { fill: none; stroke: black;}
+.axis line { stroke: black; }
 
 </style>
 <title>HW 5 ajm339</title>
@@ -133,11 +131,7 @@ function clicked(d) {
 }
 
 
-function plotHistogram(divID, data, title){
-    if(typeof(title)=='undefined' || title==null){
-      title = "";
-    }
-
+function plotHistogram(divID, data){
     if(divID.charAt(0)!='#'){
       divID = '#' + divID;
     }
@@ -155,36 +149,28 @@ function plotHistogram(divID, data, title){
     var bins = histogram(data);  
     var binWidth = bins[0].dx;
 
-    var endptX = d3.max(data);
-    var endptY = d3.max(bins, function (bin) { return bin.y; });
-
     var xScale = d3.scale.linear()
-      .domain([d3.min(data), endptX]).range([0 + padding, width]);
+      .domain([d3.min(data), d3.max(data)+binWidth]).range([0 + padding, width]);
     var yScale = d3.scale.linear()
-      .domain([0, endptY])
+      .domain([0, d3.max(bins, function (bin) { return bin.y; })])
       .range([height - padding, 10]);  
 
-    var xAxis = d3.svg.axis().scale(xScale);
-    svg.append("g").attr("class", "axis").attr("transform", "translate(0, " + yScale(0) + ")").call(xAxis);
-    var yAxis = d3.svg.axis().scale(yScale).orient("left");
-    svg.append("g").attr("class", "axis").attr("transform", "translate(" + 10 + ", 0)").call(yAxis);
+    // var xAxis = d3.svg.axis().scale(xScale);
+    // svg.append("g").attr("class", "axis").attr("transform", "translate(0, " + yScale(0) + ")").call(xAxis);
+    // var yAxis = d3.svg.axis().scale(yScale).orient("left");
+    // svg.append("g").attr("class", "axis").attr("transform", "translate(" + xScale(0) + ", 0)").call(yAxis);
 
     var bars = svg.selectAll(".bar")
       .data(bins);
     bars.enter().append("g").attr("class", "bar");
     bars.attr("transform", function (bar) { return "translate(" + xScale(bar.x) + ", " + yScale(bar.y) + ")"; });
     bars.append("rect")
-      .attr("x", 1)
-      .attr("width", xScale(binWidth) - xScale(0))
+      .attr("x", xScale(1))
+      .attr("width", Math.abs(xScale(binWidth) - xScale(0) - 1))
       .attr("height", function (bar) { return height - padding - yScale(bar.y); });
 
-    svg.append("text").attr('x', xScale(endptX/2)).attr('y', yScale(endptY)).text(title);
-
 }
 
-function onlyUnique(value, index, self) { 
-    return self.indexOf(value) === index;
-}
 
 var normal = d3.random.normal();
 
@@ -192,62 +178,23 @@ function normal1000(){
   var array = [];
   for(var i=1; i<=1000; i++){
     var x = Math.random();
-    array.push(Math.floor(normal()));
+    array.push(Math.floor(normal(x)));
   }
   return array;
 } 
 
-function meanNormal100(){
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
+
+function mean100(){
   var means = [];
   for(var i=1; i<=100; i++){
-    means.push(d3.mean(normal1000()));
-  }
-  return means;
-}
-
-function exponential1000(){
-  exponentials = [];
-  for(var i=1; i<=1000; i++){
-    var x = Math.random();
-    exponentials.push(Math.abs(Math.log(x)));
-  }
-  return exponentials;
-}
-
-function meanExponential100(){
-  var means = [];
-  for(var i=1; i<=100; i++){
-    means.push(d3.mean(exponential1000()));
-  }
-  return means;
-}
-
-function cauchy1000(){
-  var array = [];
-  for(var i=1; i<=1000; i++){
-    var x = Math.random();
-    array.push(Math.floor(normal()/normal()));
-  }
-  return array;
-}
-
-function meanCauchy100(){
-  var means = [];
-  for(var i=1; i<=100; i++){
-    means.push(d3.mean(cauchy1000()));
+    means.push(Math.abs(d3.mean(normal1000())));
   }
   return means;
 }
 
 </script>
-
-<p>P4: The xScale is different because the average of each gaussian distribution hovers around 0, so the guassian distribution of 100 means of gaussian distributions will be of values hovering around 0.</p>
-
-<p>P6: The xScale hovers around 1 since the histogram represents the gaussian distribution of the average of 1000 exponential graphs, and the most dense part of the exponential graph is around 1.</p>
-
-<p>P8: The histogram is similar in that it peaks in the center, but it differs in that although the histogram has a highly concentrated center, the rest of the data is significantly smaller and spread out.</p>
-
-
-
 </body>
-</html>
